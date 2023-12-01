@@ -2,12 +2,13 @@ package com.example.springonlinebookstore.repository.impl;
 
 import com.example.springonlinebookstore.model.Book;
 import com.example.springonlinebookstore.repository.BookRepository;
+import java.util.List;
+import java.util.Optional;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
-import java.util.List;
 
 @Repository
 public class BookRepositoryImpl implements BookRepository {
@@ -45,8 +46,20 @@ public class BookRepositoryImpl implements BookRepository {
 
     @Override
     public List<Book> findAll() {
-        try (Session session = sessionFactory.openSession()){
-           return session.createQuery("from Book ",Book.class).getResultList();
+        try (Session session = sessionFactory.openSession()) {
+            return session.createQuery("from Book ", Book.class).getResultList();
+        } catch (RuntimeException e) {
+
+            throw new RuntimeException("Cant find book! ", e);
+        }
+    }
+
+    @Override
+    public Optional<Book> findById(Long id) {
+        try (Session session = sessionFactory.openSession()) {
+            return Optional.ofNullable(session.find(Book.class, id));
+        } catch (RuntimeException e) {
+            throw new RuntimeException("Cant find book by id: " + id, e);
         }
     }
 }
