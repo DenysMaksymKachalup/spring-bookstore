@@ -1,5 +1,6 @@
 package com.example.springonlinebookstore.dto;
 
+import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -23,9 +24,11 @@ public class BookDto {
     @ISBN
     private String isbn;
 
+    @NotNull
     @Min(0)
     private BigDecimal price;
 
+    @Max(255)
     private String description;
 
     private String coverImage;
