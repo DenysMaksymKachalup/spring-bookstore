@@ -22,8 +22,8 @@ public class BookSpecificationBuilder implements SpecificationBuilder<Book> {
                     .getSpecificationProvider("author")
                     .getSpecification(bookSearchParameters.authors()));
         }
-        if (bookSearchParameters.authors() != null
-                && bookSearchParameters.authors().length > 0) {
+        if (bookSearchParameters.titles() != null
+                && bookSearchParameters.titles().length > 0) {
             specification = specification.and(bookSpecificationProviderManager
                     .getSpecificationProvider("title")
                     .getSpecification(bookSearchParameters.titles()));
