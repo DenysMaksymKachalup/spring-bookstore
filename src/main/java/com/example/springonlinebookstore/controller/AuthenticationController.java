@@ -2,7 +2,6 @@ package com.example.springonlinebookstore.controller;
 
 import com.example.springonlinebookstore.dto.user.UserDto;
 import com.example.springonlinebookstore.dto.user.UserRegistrationRequestDto;
-import com.example.springonlinebookstore.exception.RegistrationException;
 import com.example.springonlinebookstore.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
