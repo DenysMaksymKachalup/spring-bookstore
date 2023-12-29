@@ -43,7 +43,7 @@ public class BookController {
     @GetMapping("/search")
     @Operation(summary = "Find book by parameters",
             description = "Get a list all books that match the parameters")
-    public List<BookDto> search(@RequestBody @Valid BookSearchParameters bookSearchParameters,
+    public List<BookDto> search(@RequestBody BookSearchParameters bookSearchParameters,
                                 Pageable pageable) {
         return bookService.search(bookSearchParameters, pageable);
     }
