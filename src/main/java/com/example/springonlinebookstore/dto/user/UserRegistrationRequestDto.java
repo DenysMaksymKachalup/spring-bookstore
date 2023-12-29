@@ -1,6 +1,5 @@
 package com.example.springonlinebookstore.dto.user;
 
-
 import com.example.springonlinebookstore.annotation.FieldsValueMatch;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -14,8 +13,11 @@ import org.hibernate.validator.constraints.Length;
 @Getter
 @EqualsAndHashCode
 @RequiredArgsConstructor
-@FieldsValueMatch(field = "password", fieldMatch = "repeatPassword")
-public class CreateUserRequestDto {
+@FieldsValueMatch.List({
+        @FieldsValueMatch(field = "password",
+                fieldMatch = "repeatPassword",
+                message = "The password fields must match")})
+public class UserRegistrationRequestDto {
 
     @Email
     private String email;

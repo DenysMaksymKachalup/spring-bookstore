@@ -1,8 +1,8 @@
 package com.example.springonlinebookstore.dto.book;
 
-import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
 
 public record BookSearchParameters(
-        @NotBlank String[] titles,
-        @NotBlank String[] authors) {
+        @NotEmpty String[] titles,
+        @NotEmpty String[] authors) {
 }
