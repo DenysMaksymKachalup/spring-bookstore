@@ -13,10 +13,9 @@ import org.hibernate.validator.constraints.Length;
 @Getter
 @EqualsAndHashCode
 @RequiredArgsConstructor
-@FieldsValueMatch.List({
-        @FieldsValueMatch(field = "password",
-                fieldMatch = "repeatPassword",
-                message = "The password fields must match")})
+@FieldsValueMatch(field = "password",
+        fieldMatch = "repeatPassword",
+        message = "The password fields must match")
 public class UserRegistrationRequestDto {
 
     @Email

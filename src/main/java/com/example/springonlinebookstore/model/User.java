@@ -16,7 +16,6 @@ import lombok.ToString;
 @RequiredArgsConstructor
 @Getter
 @Setter
-@ToString
 public class User {
 
     @Id
@@ -25,7 +24,6 @@ public class User {
     @Column(unique = true, nullable = false)
     private String email;
     @Column(nullable = false)
-    @ToString.Exclude
     private String password;
     @Column(unique = true, nullable = false)
     private String firstName;
