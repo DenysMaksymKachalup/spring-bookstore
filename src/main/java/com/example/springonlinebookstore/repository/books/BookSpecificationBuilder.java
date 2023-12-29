@@ -1,6 +1,6 @@
 package com.example.springonlinebookstore.repository.books;
 
-import com.example.springonlinebookstore.dto.BookSearchParameters;
+import com.example.springonlinebookstore.dto.book.BookSearchParameters;
 import com.example.springonlinebookstore.model.Book;
 import com.example.springonlinebookstore.repository.SpecificationBuilder;
 import lombok.AllArgsConstructor;

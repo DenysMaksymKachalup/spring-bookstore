@@ -1,4 +1,4 @@
-package com.example.springonlinebookstore.dto;
+package com.example.springonlinebookstore.dto.book;
 
 import jakarta.validation.constraints.NotBlank;
 
