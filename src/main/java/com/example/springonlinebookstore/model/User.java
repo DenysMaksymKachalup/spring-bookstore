@@ -16,7 +16,6 @@ import lombok.Setter;
 @Getter
 @Setter
 public class User {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -24,12 +23,9 @@ public class User {
     private String email;
     @Column(nullable = false)
     private String password;
-    @Column(unique = true, nullable = false)
+    @Column(nullable = false)
     private String firstName;
-    @Column(unique = true, nullable = false)
-
+    @Column(nullable = false)
     private String lastName;
-    @Column(unique = true, nullable = false)
-
     private String shippingAddress;
 }
