@@ -1,4 +1,4 @@
-package com.example.springonlinebookstore.dto;
+package com.example.springonlinebookstore.dto.book;
 
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
@@ -9,18 +9,15 @@ import lombok.Data;
 import org.hibernate.validator.constraints.ISBN;
 
 @Data
-public class BookDto {
+public class CreateBookRequestDto {
 
-    private Long id;
-
-    @NotNull
     @NotBlank
     private String title;
 
-    @NotNull
+    @NotBlank
     private String author;
 
-    @NotNull
+    @NotBlank
     @ISBN
     private String isbn;
 
@@ -32,5 +29,4 @@ public class BookDto {
     private String description;
 
     private String coverImage;
-
 }
