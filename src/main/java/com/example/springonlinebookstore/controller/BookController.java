@@ -1,8 +1,8 @@
 package com.example.springonlinebookstore.controller;
 
-import com.example.springonlinebookstore.dto.BookDto;
-import com.example.springonlinebookstore.dto.BookSearchParameters;
-import com.example.springonlinebookstore.dto.CreateBookRequestDto;
+import com.example.springonlinebookstore.dto.book.BookDto;
+import com.example.springonlinebookstore.dto.book.BookSearchParameters;
+import com.example.springonlinebookstore.dto.book.CreateBookRequestDto;
 import com.example.springonlinebookstore.service.BookService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;

@@ -1,8 +1,8 @@
 package com.example.springonlinebookstore.service.impl;
 
-import com.example.springonlinebookstore.dto.BookDto;
-import com.example.springonlinebookstore.dto.BookSearchParameters;
-import com.example.springonlinebookstore.dto.CreateBookRequestDto;
+import com.example.springonlinebookstore.dto.book.BookDto;
+import com.example.springonlinebookstore.dto.book.BookSearchParameters;
+import com.example.springonlinebookstore.dto.book.CreateBookRequestDto;
 import com.example.springonlinebookstore.exception.EntityNotFoundException;
 import com.example.springonlinebookstore.mapper.BookMapper;
 import com.example.springonlinebookstore.model.Book;
