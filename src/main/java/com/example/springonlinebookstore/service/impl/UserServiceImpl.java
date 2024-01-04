@@ -5,9 +5,13 @@ import com.example.springonlinebookstore.dto.user.UserRegistrationRequestDto;
 import com.example.springonlinebookstore.exception.RegistrationException;
 import com.example.springonlinebookstore.mapper.UserMapper;
 import com.example.springonlinebookstore.model.User;
+import com.example.springonlinebookstore.model.enumeration.RoleName;
+import com.example.springonlinebookstore.repository.roles.RoleRepository;
 import com.example.springonlinebookstore.repository.users.UserRepository;
 import com.example.springonlinebookstore.service.UserService;
+import java.util.Set;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -15,6 +19,8 @@ import org.springframework.stereotype.Service;
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final UserMapper userMapper;
+    private final PasswordEncoder passwordEncoder;
+    private final RoleRepository roleRepository;
 
     @Override
     public UserDto register(UserRegistrationRequestDto userRegistrationRequestDto)
@@ -24,7 +30,13 @@ public class UserServiceImpl implements UserService {
             throw new RegistrationException("User with email "
                     + email + " already exist!");
         }
-        User user = userRepository.save(userMapper.toModel(userRegistrationRequestDto));
-        return userMapper.toDto(user);
+        User modelForSaving = userMapper.toModel(userRegistrationRequestDto);
+
+        modelForSaving.setRoles(Set.of(roleRepository
+                .findRoleByName(RoleName.ROLE_USER)));
+        modelForSaving.setPassword(passwordEncoder
+                .encode(userRegistrationRequestDto.getPassword()));
+
+        return userMapper.toDto(userRepository.save(modelForSaving));
     }
 }
