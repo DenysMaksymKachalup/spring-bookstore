@@ -5,6 +5,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import java.math.BigDecimal;
+import java.util.List;
 import lombok.Data;
 import org.hibernate.validator.constraints.ISBN;
 
@@ -32,5 +33,7 @@ public class BookDto {
     private String description;
 
     private String coverImage;
+
+    private List<Long> categoriesIds;
 
 }
