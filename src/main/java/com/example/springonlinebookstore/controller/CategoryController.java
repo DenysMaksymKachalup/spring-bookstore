@@ -3,12 +3,12 @@ package com.example.springonlinebookstore.controller;
 import com.example.springonlinebookstore.dto.book.BookDtoWithoutCategoryIds;
 import com.example.springonlinebookstore.dto.category.CategoryDto;
 import com.example.springonlinebookstore.dto.category.CategoryRequestDto;
-import com.example.springonlinebookstore.model.Book;
 import com.example.springonlinebookstore.service.BookService;
 import com.example.springonlinebookstore.service.CategoryService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -19,7 +19,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import java.util.List;
 
 @Tag(name = "categories", description = "Endpoints for managing categories")
 @RestController
@@ -41,9 +40,9 @@ public class CategoryController {
         return categoryService.findById(id);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @Operation(summary = "Save category.",
             description = "Save category. Only ADMIN has access save a category.")
-    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping()
     public CategoryDto save(
             @RequestBody @Valid CategoryRequestDto categoryRequestDto) {
@@ -70,7 +69,8 @@ public class CategoryController {
     @Operation(summary = "Get all books by category.",
             description = "You can get all books by category.")
     @GetMapping("/{id}/books")
-    public List<BookDtoWithoutCategoryIds> getBooksByCategoryId(@PathVariable Long id, Pageable pageable) {
+    public List<BookDtoWithoutCategoryIds> getBooksByCategoryId(
+            @PathVariable Long id, Pageable pageable) {
         return bookService.getBooksByCategoryId(id, pageable);
     }
 }

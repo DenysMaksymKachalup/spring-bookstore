@@ -7,9 +7,9 @@ import com.example.springonlinebookstore.mapper.CategoryMapper;
 import com.example.springonlinebookstore.model.Category;
 import com.example.springonlinebookstore.repository.categories.CategoryRepository;
 import com.example.springonlinebookstore.service.CategoryService;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -40,7 +40,7 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public CategoryDto update(Long id, CategoryRequestDto categoryRequestDto) {
-        if (!categoryRepository.existsById(id)){
+        if (!categoryRepository.existsById(id)) {
             throw new EntityNotFoundException(
                     "Category with id: " + id + "not found");
         }
