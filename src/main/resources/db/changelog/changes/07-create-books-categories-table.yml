@@ -1,0 +1,22 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-books-categories-table
+      author: den
+      changes:
+        - createTable:
+            tableName: books_categories
+            columns:
+              - column:
+                  name: books_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_books_categories_book
+                    references: books(id)
+              - column:
+                  name: categories_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_books_categories_category
+                    references: categories(id)
