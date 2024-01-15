@@ -1,6 +1,7 @@
 package com.example.springonlinebookstore.service.impl;
 
 import com.example.springonlinebookstore.dto.book.BookDto;
+import com.example.springonlinebookstore.dto.book.BookDtoWithoutCategoryIds;
 import com.example.springonlinebookstore.dto.book.BookSearchParameters;
 import com.example.springonlinebookstore.dto.book.CreateBookRequestDto;
 import com.example.springonlinebookstore.exception.EntityNotFoundException;
@@ -62,5 +63,13 @@ public class BookServiceImpl implements BookService {
     @Override
     public void deleteById(Long id) {
         bookRepository.deleteById(id);
+    }
+
+    @Override
+    public List<BookDtoWithoutCategoryIds> getBooksByCategoryId(
+            Long categoryId, Pageable pageable) {
+        return bookRepository.findAllByCategoryId(categoryId,pageable).stream()
+                .map(bookMapper::toBookDtoWithoutCategoryIds)
+                .toList();
     }
 }
