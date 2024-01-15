@@ -11,7 +11,6 @@ import org.hibernate.validator.constraints.ISBN;
 
 @Data
 public class BookDto {
-
     private Long id;
 
     @NotNull
@@ -35,5 +34,4 @@ public class BookDto {
     private String coverImage;
 
     private List<Long> categoriesIds;
-
 }
