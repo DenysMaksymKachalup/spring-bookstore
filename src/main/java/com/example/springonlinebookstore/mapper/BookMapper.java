@@ -6,13 +6,13 @@ import com.example.springonlinebookstore.dto.book.BookDtoWithoutCategoryIds;
 import com.example.springonlinebookstore.dto.book.CreateBookRequestDto;
 import com.example.springonlinebookstore.model.Book;
 import com.example.springonlinebookstore.model.Category;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 import org.mapstruct.AfterMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
-import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 @Mapper(config = MapperConfig.class)
 public interface BookMapper {
