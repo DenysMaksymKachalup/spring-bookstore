@@ -1,5 +1,6 @@
 package com.example.springonlinebookstore.service.impl;
 
+import com.example.springonlinebookstore.dto.book.BookDto;
 import com.example.springonlinebookstore.dto.cartitem.CartItemQuantityRequestDto;
 import com.example.springonlinebookstore.dto.cartitem.CartItemRequestDto;
 import com.example.springonlinebookstore.dto.cartitem.CartItemResponseDto;
@@ -15,7 +16,6 @@ import com.example.springonlinebookstore.repository.shoppingcart.ShoppingCartRep
 import com.example.springonlinebookstore.repository.users.UserRepository;
 import com.example.springonlinebookstore.service.BookService;
 import com.example.springonlinebookstore.service.ShoppingCartService;
-import java.util.Set;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -33,20 +33,18 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
     @Override
     public ShoppingCartDto findByUser() {
         ShoppingCart shoppingCart = getShoppingCart();
-        Set<CartItem> cartItemsByShoppingCartId = cartItemRepository
-                .findCartItemsByShoppingCartId(shoppingCart.getId());
-        shoppingCart.setCartItems(cartItemsByShoppingCartId);
 
-        ShoppingCartDto dto = shoppingCartMapper.toDto(shoppingCart);
-        return dto;
+        return shoppingCartMapper.toDto(shoppingCart);
     }
 
     @Override
     public CartItemResponseDto addBookToShoppingCart(CartItemRequestDto cartItemRequestDto) {
-        bookService.findById(cartItemRequestDto.bookId());
+        BookDto bookDto = bookService.findById(cartItemRequestDto.bookId());
         ShoppingCart shoppingCart = getShoppingCart();
         CartItem cartItem = cartItemMapper.toModel(shoppingCart.getId(), cartItemRequestDto);
-        return cartItemMapper.toDto(cartItemRepository.save(cartItem));
+        cartItemRepository.save(cartItem);
+        cartItem.getBook().setTitle(bookDto.getTitle());
+        return cartItemMapper.toDto(cartItem);
     }
 
     @Override
@@ -59,10 +57,10 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
     }
 
     @Override
-    public ShoppingCartDto deleteCartItem(Long cartItemId) {
-        CartItem cartItem = cartItemRepository.findById(cartItemId).orElseThrow(() ->
-                new EntityNotFoundException("CartItem with id: " + cartItemId + " not found!"));
-        cartItemRepository.delete(cartItem);
+    public ShoppingCartDto deleteCartItem(Long id) {
+        CartItem cartItem = cartItemRepository.findById(id).orElseThrow(() ->
+                new EntityNotFoundException("CartItem with id: " + id + " not found!"));
+        cartItemRepository.deleteById(id);
 
         ShoppingCart shoppingCart = getShoppingCart();
         shoppingCart.setCartItems(cartItemRepository

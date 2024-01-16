@@ -13,13 +13,17 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import java.util.Set;
-import lombok.Data;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
 @Entity
 @Table(name = "shopping_carts")
-@Data
+@Getter
+@Setter
+@RequiredArgsConstructor
 @SQLDelete(sql = "UPDATE shopping_carts SET is_deleted=true WHERE id=:id")
 @Where(clause = "is_deleted=false")
 public class ShoppingCart {
@@ -37,9 +41,6 @@ public class ShoppingCart {
 
     @Column(name = "is_deleted", nullable = false)
     private boolean isDeleted = false;
-
-    public ShoppingCart() {
-    }
 
     public ShoppingCart(Long id) {
         this.id = id;
