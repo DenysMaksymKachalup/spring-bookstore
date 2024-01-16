@@ -18,6 +18,8 @@ import com.example.springonlinebookstore.service.ShoppingCartService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
@@ -28,13 +30,15 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
     private final CartItemMapper cartItemMapper;
     private final CartItemRepository cartItemRepository;
     private final BookService bookService;
-
+    @Transactional(readOnly = true)
     @Override
     public ShoppingCartDto findByUser() {
         ShoppingCart shoppingCart = getShoppingCart();
-        shoppingCart.setCartItems(cartItemRepository
-                .findCartItemsByShoppingCart(shoppingCart));
-        return shoppingCartMapper.toDto(shoppingCart);
+        Set<CartItem> cartItemsByShoppingCartId = cartItemRepository
+                .findCartItemsByShoppingCartId(shoppingCart.getId());
+        shoppingCart.setCartItems(cartItemsByShoppingCartId);
+        ShoppingCartDto dto = shoppingCartMapper.toDto(shoppingCart);
+        return dto;
     }
 
     @Override
@@ -62,7 +66,7 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
 
         ShoppingCart shoppingCart = getShoppingCart();
         shoppingCart.setCartItems(cartItemRepository
-                .findCartItemsByShoppingCart(shoppingCart));
+                .findCartItemsByShoppingCartId(shoppingCart.getId()));
         return shoppingCartMapper.toDto(shoppingCart);
     }
 
@@ -74,7 +78,7 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
 
     private ShoppingCart getShoppingCart() {
         User user = getUserFromSecurityContext();
-        return shoppingCartRepository.findShoppingCartByUser(user).orElseGet(() -> {
+        return shoppingCartRepository.findShoppingCartByUserId(user.getId()).orElseGet(() -> {
             ShoppingCart shoppingCartSave = new ShoppingCart();
             shoppingCartSave.setUser(user);
             return shoppingCartRepository.save(shoppingCartSave);
