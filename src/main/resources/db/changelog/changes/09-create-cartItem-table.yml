@@ -23,8 +23,8 @@ databaseChangeLog:
                   name: book_id
                   type: bigint
                   constraints:
-                    foreignKeyName: fk_cartItems_user
-                    references: users(id)
+                    foreignKeyName: fk_cartItems_book
+                    references: books(id)
                     nullable: false
               - column:
                   name: quantity

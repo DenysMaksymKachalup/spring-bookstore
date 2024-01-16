@@ -15,11 +15,10 @@ import com.example.springonlinebookstore.repository.shoppingcart.ShoppingCartRep
 import com.example.springonlinebookstore.repository.users.UserRepository;
 import com.example.springonlinebookstore.service.BookService;
 import com.example.springonlinebookstore.service.ShoppingCartService;
+import java.util.Set;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
@@ -30,13 +29,14 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
     private final CartItemMapper cartItemMapper;
     private final CartItemRepository cartItemRepository;
     private final BookService bookService;
-    @Transactional(readOnly = true)
+
     @Override
     public ShoppingCartDto findByUser() {
         ShoppingCart shoppingCart = getShoppingCart();
         Set<CartItem> cartItemsByShoppingCartId = cartItemRepository
                 .findCartItemsByShoppingCartId(shoppingCart.getId());
         shoppingCart.setCartItems(cartItemsByShoppingCartId);
+
         ShoppingCartDto dto = shoppingCartMapper.toDto(shoppingCart);
         return dto;
     }
