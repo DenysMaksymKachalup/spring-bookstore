@@ -6,7 +6,7 @@ import com.example.springonlinebookstore.dto.cartitem.CartItemResponseDto;
 import com.example.springonlinebookstore.dto.shoppingcart.ShoppingCartDto;
 
 public interface ShoppingCartService {
-    ShoppingCartDto findByUser();
+    ShoppingCartDto findByUserId();
 
     CartItemResponseDto addBookToShoppingCart(CartItemRequestDto cartItemRequestDto);
 

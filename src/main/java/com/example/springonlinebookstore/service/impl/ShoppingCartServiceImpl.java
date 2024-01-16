@@ -31,10 +31,8 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
     private final BookService bookService;
 
     @Override
-    public ShoppingCartDto findByUser() {
-        ShoppingCart shoppingCart = getShoppingCart();
-
-        return shoppingCartMapper.toDto(shoppingCart);
+    public ShoppingCartDto findByUserId() {
+        return shoppingCartMapper.toDto(getShoppingCart());
     }
 
     @Override
@@ -58,24 +56,20 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
 
     @Override
     public ShoppingCartDto deleteCartItem(Long id) {
-        CartItem cartItem = cartItemRepository.findById(id).orElseThrow(() ->
+        cartItemRepository.findById(id).orElseThrow(() ->
                 new EntityNotFoundException("CartItem with id: " + id + " not found!"));
         cartItemRepository.deleteById(id);
-
-        ShoppingCart shoppingCart = getShoppingCart();
-        shoppingCart.setCartItems(cartItemRepository
-                .findCartItemsByShoppingCartId(shoppingCart.getId()));
-        return shoppingCartMapper.toDto(shoppingCart);
+        return shoppingCartMapper.toDto(getShoppingCart());
     }
 
-    private User getUserFromSecurityContext() {
-        String email = SecurityContextHolder.getContext().getAuthentication().getName();
-        return userRepository.findUserByEmail(email).orElseThrow(() ->
-                new EntityNotFoundException("User with email" + email + "not found!"));
+    private User getUserFromSecurityContextHolder() {
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        return userRepository.findUserByEmail(user.getEmail()).orElseThrow(() ->
+                new EntityNotFoundException("User with email" + user.getEmail() + "not found!"));
     }
 
     private ShoppingCart getShoppingCart() {
-        User user = getUserFromSecurityContext();
+        User user = getUserFromSecurityContextHolder();
         return shoppingCartRepository.findShoppingCartByUserId(user.getId()).orElseGet(() -> {
             ShoppingCart shoppingCartSave = new ShoppingCart();
             shoppingCartSave.setUser(user);
