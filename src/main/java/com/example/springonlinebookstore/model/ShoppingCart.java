@@ -1,5 +1,6 @@
 package com.example.springonlinebookstore.model;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -27,13 +28,20 @@ public class ShoppingCart {
     private Long id;
 
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id",nullable = false)
+    @JoinColumn(name = "user_id", nullable = false)
     @MapsId
     private User user;
 
-    @OneToMany(mappedBy = "shoppingCart")
+    @OneToMany(mappedBy = "shoppingCart",cascade = CascadeType.ALL)
     private Set<CartItem> cartItems;
 
-    @Column(name = "is_deleted",nullable = false)
+    @Column(name = "is_deleted", nullable = false)
     private boolean isDeleted = false;
+
+    public ShoppingCart() {
+    }
+
+    public ShoppingCart(Long id) {
+        this.id = id;
+    }
 }

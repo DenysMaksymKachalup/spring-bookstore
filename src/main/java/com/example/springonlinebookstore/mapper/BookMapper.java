@@ -7,12 +7,14 @@ import com.example.springonlinebookstore.dto.book.CreateBookRequestDto;
 import com.example.springonlinebookstore.model.Book;
 import com.example.springonlinebookstore.model.Category;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 import org.mapstruct.AfterMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
+import org.mapstruct.Named;
 
 @Mapper(config = MapperConfig.class)
 public interface BookMapper {
@@ -39,5 +41,12 @@ public interface BookMapper {
                 .map(Category::new)
                 .collect(Collectors.toSet());
         book.setCategories(categories);
+    }
+
+    @Named("bookById")
+    default Book bookById(Long bookId) {
+        return Optional.ofNullable(bookId)
+                .map(Book::new)
+                .orElse(null);
     }
 }
