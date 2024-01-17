@@ -16,6 +16,7 @@ import com.example.springonlinebookstore.repository.shoppingcart.ShoppingCartRep
 import com.example.springonlinebookstore.repository.users.UserRepository;
 import com.example.springonlinebookstore.service.BookService;
 import com.example.springonlinebookstore.service.ShoppingCartService;
+import java.util.Set;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -39,6 +40,7 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
     public CartItemResponseDto addBookToShoppingCart(CartItemRequestDto cartItemRequestDto) {
         BookDto bookDto = bookService.findById(cartItemRequestDto.bookId());
         ShoppingCart shoppingCart = getShoppingCart();
+        checkBookInCart(shoppingCart.getCartItems(),cartItemRequestDto.bookId());
         CartItem cartItem = cartItemMapper.toModel(shoppingCart.getId(), cartItemRequestDto);
         cartItemRepository.save(cartItem);
         cartItem.getBook().setTitle(bookDto.getTitle());
@@ -75,5 +77,16 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
             shoppingCartSave.setUser(user);
             return shoppingCartRepository.save(shoppingCartSave);
         });
+    }
+
+    private void checkBookInCart(Set<CartItem> cartItems, Long bookId) {
+        cartItems.stream()
+                .map((c) -> c.getBook().getId())
+                .filter(bookId::equals)
+                .findFirst()
+                .ifPresent(s -> {
+                    throw new RuntimeException(
+                            "Book with id: " + bookId + " is already in the cart!");
+                });
     }
 }

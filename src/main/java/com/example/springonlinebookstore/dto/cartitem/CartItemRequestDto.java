@@ -1,10 +1,10 @@
 package com.example.springonlinebookstore.dto.cartitem;
 
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotNull;
 
 public record CartItemRequestDto(
-        @NotBlank Long bookId,
-        @Size(min = 1) int quantity
+        @NotNull Long bookId,
+        @Min(1) int quantity
 ) {
 }

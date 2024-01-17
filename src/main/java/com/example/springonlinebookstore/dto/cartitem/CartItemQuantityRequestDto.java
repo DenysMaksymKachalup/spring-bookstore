@@ -1,8 +1,8 @@
 package com.example.springonlinebookstore.dto.cartitem;
 
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.Min;
 
 public record CartItemQuantityRequestDto(
-        @Size(min = 1) int quantity
+        @Min(1) int quantity
 ) {
 }

@@ -10,6 +10,7 @@ databaseChangeLog:
                   name: user_id
                   type: bigint
                   constraints:
+                    primaryKey: true
                     foreignKeyName: fk_shopping_cart_user
                     references: users(id)
               - column:
