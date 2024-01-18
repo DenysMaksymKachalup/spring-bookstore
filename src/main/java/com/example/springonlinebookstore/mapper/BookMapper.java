@@ -6,13 +6,16 @@ import com.example.springonlinebookstore.dto.book.BookDtoWithoutCategoryIds;
 import com.example.springonlinebookstore.dto.book.CreateBookRequestDto;
 import com.example.springonlinebookstore.model.Book;
 import com.example.springonlinebookstore.model.Category;
+import com.example.springonlinebookstore.repository.books.BookRepository;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 import org.mapstruct.AfterMapping;
+import org.mapstruct.Context;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
+import org.mapstruct.Named;
 
 @Mapper(config = MapperConfig.class)
 public interface BookMapper {
@@ -39,5 +42,11 @@ public interface BookMapper {
                 .map(Category::new)
                 .collect(Collectors.toSet());
         book.setCategories(categories);
+    }
+
+    @Named("bookById")
+    default Book bookById(Long bookId, @Context BookRepository bookRepository) {
+        return bookRepository.findById(bookId)
+                .orElseGet(Book::new);
     }
 }
