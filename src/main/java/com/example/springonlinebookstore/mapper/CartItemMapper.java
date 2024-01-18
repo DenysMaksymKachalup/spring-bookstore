@@ -5,7 +5,9 @@ import com.example.springonlinebookstore.dto.cartitem.CartItemRequestDto;
 import com.example.springonlinebookstore.dto.cartitem.CartItemResponseDto;
 import com.example.springonlinebookstore.model.CartItem;
 import com.example.springonlinebookstore.model.ShoppingCart;
-import java.util.Optional;
+import com.example.springonlinebookstore.repository.books.BookRepository;
+import com.example.springonlinebookstore.repository.shoppingcart.ShoppingCartRepository;
+import org.mapstruct.Context;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;
@@ -22,12 +24,17 @@ public interface CartItemMapper {
     @Mapping(target = "book",
             source = "cartItemRequestDto.bookId",
             qualifiedByName = "bookById")
-    CartItem toModel(Long shoppingCartId, CartItemRequestDto cartItemRequestDto);
+    CartItem toModel(
+            Long shoppingCartId,
+            CartItemRequestDto cartItemRequestDto,
+            @Context ShoppingCartRepository shoppingCartRepository,
+            @Context BookRepository bookRepository);
 
     @Named("shoppingCartById")
-    default ShoppingCart shoppingCartById(Long shoppingCartId) {
-        return Optional.ofNullable(shoppingCartId)
-                .map(ShoppingCart::new)
-                .orElse(null);
+    default ShoppingCart shoppingCartById(
+            Long shoppingCartId,
+            @Context ShoppingCartRepository shoppingCartRepository) {
+        return shoppingCartRepository.findById(shoppingCartId)
+                .orElseGet(ShoppingCart::new);
     }
 }
