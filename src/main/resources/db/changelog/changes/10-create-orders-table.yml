@@ -1,0 +1,39 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-orders-table
+      author: den
+      changes:
+        - createTable:
+            tableName: orders
+            columns:
+              - column:
+                  name: user_id
+                  type: bigint
+                  constraints:
+                    primaryKey: true
+                    foreignKeyName: fk_orders_user
+                    references: users(id)
+              - column:
+                  name: status
+                  type: varchar(50)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: total
+                  type: decimal
+                  constraints:
+                    nullable: false
+              - column:
+                  name: orderDate
+                  type: datetime
+                  constraints:
+                    nullable: false
+              - column:
+                  name: shippingAddress
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: is_deleted
+                  type: boolean
+                  defaultValueBoolean: false
