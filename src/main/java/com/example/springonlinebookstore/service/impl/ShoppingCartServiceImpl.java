@@ -11,7 +11,6 @@ import com.example.springonlinebookstore.mapper.ShoppingCartMapper;
 import com.example.springonlinebookstore.model.CartItem;
 import com.example.springonlinebookstore.model.ShoppingCart;
 import com.example.springonlinebookstore.model.User;
-import com.example.springonlinebookstore.repository.books.BookRepository;
 import com.example.springonlinebookstore.repository.cartitems.CartItemRepository;
 import com.example.springonlinebookstore.repository.shoppingcart.ShoppingCartRepository;
 import com.example.springonlinebookstore.repository.users.UserRepository;
@@ -31,7 +30,6 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
     private final CartItemMapper cartItemMapper;
     private final CartItemRepository cartItemRepository;
     private final BookService bookService;
-    private final BookRepository bookRepository;
 
     @Override
     public ShoppingCartDto findByUserId() {
@@ -45,9 +43,7 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
         checkBookInCart(shoppingCart.getCartItems(), cartItemRequestDto.bookId());
         CartItem cartItem = cartItemMapper.toModel(
                 shoppingCart.getId(),
-                cartItemRequestDto,
-                shoppingCartRepository,
-                bookRepository);
+                cartItemRequestDto);
         cartItemRepository.save(cartItem);
         cartItem.getBook().setTitle(bookDto.getTitle());
         return cartItemMapper.toDto(cartItem);
@@ -66,6 +62,13 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
         findCartItemById(id);
         cartItemRepository.deleteById(id);
         return shoppingCartMapper.toDto(findShoppingCart());
+    }
+
+    @Override
+    public void cleanShoppingCart() {
+        for (CartItemResponseDto cartItem : findByUserId().cartItems()) {
+            deleteCartItem(cartItem.id());
+        }
     }
 
     private User getUserFromSecurityContextHolder() {
