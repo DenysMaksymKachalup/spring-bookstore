@@ -10,14 +10,12 @@ import com.example.springonlinebookstore.mapper.OrderMapper;
 import com.example.springonlinebookstore.model.CartItem;
 import com.example.springonlinebookstore.model.Order;
 import com.example.springonlinebookstore.model.OrderItem;
-import com.example.springonlinebookstore.model.ShoppingCart;
 import com.example.springonlinebookstore.model.User;
+import com.example.springonlinebookstore.model.enumeration.Status;
 import com.example.springonlinebookstore.repository.cartitems.CartItemRepository;
 import com.example.springonlinebookstore.repository.order.OrderRepository;
 import com.example.springonlinebookstore.repository.orderitem.OrderItemRepository;
-import com.example.springonlinebookstore.repository.shoppingcart.ShoppingCartRepository;
 import com.example.springonlinebookstore.repository.users.UserRepository;
-import com.example.springonlinebookstore.service.BookService;
 import com.example.springonlinebookstore.service.OrderService;
 import com.example.springonlinebookstore.service.ShoppingCartService;
 import java.math.BigDecimal;
@@ -36,22 +34,20 @@ public class OrderServiceImpl implements OrderService {
     private final OrderItemMapper orderItemMapper;
     private final UserRepository userRepository;
     private final OrderRepository orderRepository;
-    private final ShoppingCartRepository shoppingCartRepository;
     private final OrderItemRepository orderItemRepository;
     private final ShoppingCartService shoppingCartService;
     private final CartItemRepository cartItemRepository;
-    private final BookService bookService;
 
-    // TODO: 19.01.2024  method which delete all cartItem in shoppingCart
+    @Transactional
     @Override
     public OrderResponseDto createOrder(OrderRequestDto orderRequestDto) {
-        Set<CartItem> сartItems = getСartItems();
+        Set<CartItem> cartItems = getCartItems();
 
         Order order = new Order();
         order.setShippingAddress(orderRequestDto.shippingAddress());
-        order.setTotal(countTotal(сartItems));
+        order.setTotal(countTotal(cartItems));
         order.setUser(getUserFromSecurityHolder());
-        order.setOrderItems(createOrderItems(order, сartItems));
+        order.setOrderItems(createOrderItems(order, cartItems));
 
         shoppingCartService.cleanShoppingCart();
         return orderMapper.toDto(orderRepository.save(order));
@@ -66,14 +62,18 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public OrderRequestDto updateStatusOrder(OrderUpdateRequestDto orderUpdateRequestDto) {
-        return null;
+    public OrderResponseDto updateStatusOrder(Long id, OrderUpdateRequestDto orderUpdateDto) {
+        Order order = orderRepository.findById(id)
+                .orElseThrow(() ->
+                        new EntityNotFoundException("Order by id: " + id + " not found"));
+        order.setStatus(Status.valueOf(orderUpdateDto.status()));
+        return orderMapper.toDto(orderRepository.save(order));
     }
 
     @Transactional(readOnly = true)
     @Override
     public List<OrderItemResponseDto> findAllOrderItemsInOrderById(Long orderId) {
-        return orderItemRepository.findOrderItemByOrderId(orderId).stream()
+        return orderItemRepository.findOrderItemsByOrderId(orderId).stream()
                 .map(orderItemMapper::toDto)
                 .toList();
     }
@@ -81,7 +81,11 @@ public class OrderServiceImpl implements OrderService {
     @Transactional(readOnly = true)
     @Override
     public OrderItemResponseDto findOrderItemInOrderById(Long orderItemId, Long orderId) {
-        return null;
+        OrderItem orderItem = orderItemRepository.findOrderItemByOrderIdAndId(orderItemId, orderId)
+                .orElseThrow(() -> new EntityNotFoundException(
+                        "OrderItem with ID: " + orderItemId
+                                + " in order with id: " + orderId + " not found!"));
+        return orderItemMapper.toDto(orderItem);
     }
 
     private User getUserFromSecurityHolder() {
@@ -111,12 +115,12 @@ public class OrderServiceImpl implements OrderService {
         return orderItems;
     }
 
-    private Set<CartItem> getСartItems() {
+    private Set<CartItem> getCartItems() {
         Set<CartItem> cartItems = cartItemRepository
                 .findCartItemsByShoppingCartId(getUserFromSecurityHolder().getId());
         if (cartItems.isEmpty()) {
             throw new RuntimeException("Shopping cart is empty!");
         }
-        return  cartItems;
+        return cartItems;
     }
 }

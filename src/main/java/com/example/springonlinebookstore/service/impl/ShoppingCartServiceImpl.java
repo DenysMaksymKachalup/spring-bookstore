@@ -20,6 +20,7 @@ import java.util.Set;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -33,7 +34,8 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
 
     @Override
     public ShoppingCartDto findByUserId() {
-        return shoppingCartMapper.toDto(findShoppingCart());
+        ShoppingCart shoppingCart = findShoppingCart();
+        return shoppingCartMapper.toDto(shoppingCart);
     }
 
     @Override
@@ -64,11 +66,12 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
         return shoppingCartMapper.toDto(findShoppingCart());
     }
 
+    @Transactional
     @Override
     public void cleanShoppingCart() {
-        for (CartItemResponseDto cartItem : findByUserId().cartItems()) {
-            deleteCartItem(cartItem.id());
-        }
+        ShoppingCart shoppingCart = findShoppingCart();
+        shoppingCart.getCartItems().clear();
+        shoppingCartRepository.save(shoppingCart);
     }
 
     private User getUserFromSecurityContextHolder() {

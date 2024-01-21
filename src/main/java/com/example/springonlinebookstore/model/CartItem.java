@@ -28,14 +28,14 @@ public class CartItem {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "shopping_cart_id",nullable = false)
+    @JoinColumn(name = "shopping_cart_id", nullable = false)
     private ShoppingCart shoppingCart;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "book_id",nullable = false)
+    @JoinColumn(name = "book_id", nullable = false)
     private Book book;
 
-    @Column(name = "quantity",nullable = false)
+    @Column(name = "quantity", nullable = false)
     private int quantity;
 
     @Column(name = "is_deleted")

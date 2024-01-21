@@ -11,7 +11,7 @@ public interface OrderService {
 
     List<OrderResponseDto> findAllOrders();
 
-    OrderRequestDto updateStatusOrder(OrderUpdateRequestDto orderUpdateRequestDto);
+    OrderResponseDto updateStatusOrder(Long id, OrderUpdateRequestDto orderUpdateRequestDto);
 
     List<OrderItemResponseDto> findAllOrderItemsInOrderById(Long orderId);
 

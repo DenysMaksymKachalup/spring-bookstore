@@ -24,7 +24,7 @@ import org.hibernate.annotations.Where;
 @Getter
 @Setter
 @RequiredArgsConstructor
-@SQLDelete(sql = "UPDATE shopping_carts SET is_deleted=true WHERE id=:id")
+@SQLDelete(sql = "UPDATE shopping_carts SET is_deleted=true WHERE user_id=?")
 @Where(clause = "is_deleted=false")
 public class ShoppingCart {
     @Id
@@ -36,7 +36,7 @@ public class ShoppingCart {
     @MapsId
     private User user;
 
-    @OneToMany(mappedBy = "shoppingCart",cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "shoppingCart", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<CartItem> cartItems;
 
     @Column(name = "is_deleted", nullable = false)
