@@ -15,7 +15,7 @@ services:
 
   app:
     depends_on:
-    - mysqldb
+      - mysqldb
     restart: on-failure
     image: bookstore_service
     build: .
@@ -31,4 +31,3 @@ services:
       "spring.jpa.properties.hibernate.dialect" : "org.hibernate.dialect.MySQL8Dialect"
       }'
       JAVA_TOOL_OPTIONS: "-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005"
-
