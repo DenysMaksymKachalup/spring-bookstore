@@ -11,7 +11,6 @@ import com.example.springonlinebookstore.mapper.ShoppingCartMapper;
 import com.example.springonlinebookstore.model.CartItem;
 import com.example.springonlinebookstore.model.ShoppingCart;
 import com.example.springonlinebookstore.model.User;
-import com.example.springonlinebookstore.repository.books.BookRepository;
 import com.example.springonlinebookstore.repository.cartitems.CartItemRepository;
 import com.example.springonlinebookstore.repository.shoppingcart.ShoppingCartRepository;
 import com.example.springonlinebookstore.repository.users.UserRepository;
@@ -21,6 +20,7 @@ import java.util.Set;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -31,23 +31,21 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
     private final CartItemMapper cartItemMapper;
     private final CartItemRepository cartItemRepository;
     private final BookService bookService;
-    private final BookRepository bookRepository;
 
+    @Transactional(readOnly = true)
     @Override
     public ShoppingCartDto findByUserId() {
-        return shoppingCartMapper.toDto(findShoppingCart());
+        ShoppingCart shoppingCart = findShoppingCart();
+        return shoppingCartMapper.toDto(shoppingCart);
     }
 
+    @Transactional
     @Override
     public CartItemResponseDto addBookToShoppingCart(CartItemRequestDto cartItemRequestDto) {
         BookDto bookDto = bookService.findById(cartItemRequestDto.bookId());
         ShoppingCart shoppingCart = findShoppingCart();
         checkBookInCart(shoppingCart.getCartItems(), cartItemRequestDto.bookId());
-        CartItem cartItem = cartItemMapper.toModel(
-                shoppingCart.getId(),
-                cartItemRequestDto,
-                shoppingCartRepository,
-                bookRepository);
+        CartItem cartItem = cartItemMapper.toModel(shoppingCart, cartItemRequestDto);
         cartItemRepository.save(cartItem);
         cartItem.getBook().setTitle(bookDto.getTitle());
         return cartItemMapper.toDto(cartItem);
@@ -66,6 +64,13 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
         findCartItemById(id);
         cartItemRepository.deleteById(id);
         return shoppingCartMapper.toDto(findShoppingCart());
+    }
+
+    @Transactional
+    @Override
+    public void cleanShoppingCart() {
+        ShoppingCart shoppingCart = findShoppingCart();
+        shoppingCart.getCartItems().clear();
     }
 
     private User getUserFromSecurityContextHolder() {

@@ -25,7 +25,7 @@ public class BookDto {
     private String isbn;
 
     @NotNull
-    @Min(0)
+    @Min(1)
     private BigDecimal price;
 
     @Size(max = 255)

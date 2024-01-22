@@ -9,35 +9,32 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import java.math.BigDecimal;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
-import org.hibernate.annotations.SQLDelete;
-import org.hibernate.annotations.Where;
 
 @Entity
-@Table(name = "cart_items")
+@Table(name = "order_items")
 @Getter
 @Setter
 @RequiredArgsConstructor
-@SQLDelete(sql = "UPDATE cart_items SET is_deleted = true where id=?")
-@Where(clause = "is_deleted=false")
-public class CartItem {
+public class OrderItem {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "shopping_cart_id", nullable = false)
-    private ShoppingCart shoppingCart;
+    @JoinColumn(name = "order_id", nullable = false)
+    private Order order;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "book_id", nullable = false)
+    @JoinColumn(name = "book_id",nullable = false)
     private Book book;
 
-    @Column(name = "quantity", nullable = false)
+    @Column(nullable = false)
     private int quantity;
 
-    @Column(name = "is_deleted")
-    private boolean isDeleted = false;
+    @Column(nullable = false)
+    private BigDecimal price;
 }
