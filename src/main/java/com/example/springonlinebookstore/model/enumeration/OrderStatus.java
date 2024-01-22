@@ -1,6 +1,6 @@
 package com.example.springonlinebookstore.model.enumeration;
 
-public enum Status {
+public enum OrderStatus {
     NEW,
     PENDING,
     DELIVERED,

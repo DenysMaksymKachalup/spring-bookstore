@@ -32,20 +32,20 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
     private final CartItemRepository cartItemRepository;
     private final BookService bookService;
 
+    @Transactional(readOnly = true)
     @Override
     public ShoppingCartDto findByUserId() {
         ShoppingCart shoppingCart = findShoppingCart();
         return shoppingCartMapper.toDto(shoppingCart);
     }
 
+    @Transactional
     @Override
     public CartItemResponseDto addBookToShoppingCart(CartItemRequestDto cartItemRequestDto) {
         BookDto bookDto = bookService.findById(cartItemRequestDto.bookId());
         ShoppingCart shoppingCart = findShoppingCart();
         checkBookInCart(shoppingCart.getCartItems(), cartItemRequestDto.bookId());
-        CartItem cartItem = cartItemMapper.toModel(
-                shoppingCart.getId(),
-                cartItemRequestDto);
+        CartItem cartItem = cartItemMapper.toModel(shoppingCart, cartItemRequestDto);
         cartItemRepository.save(cartItem);
         cartItem.getBook().setTitle(bookDto.getTitle());
         return cartItemMapper.toDto(cartItem);
@@ -71,7 +71,6 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
     public void cleanShoppingCart() {
         ShoppingCart shoppingCart = findShoppingCart();
         shoppingCart.getCartItems().clear();
-        shoppingCartRepository.save(shoppingCart);
     }
 
     private User getUserFromSecurityContextHolder() {

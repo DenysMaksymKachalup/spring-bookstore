@@ -1,6 +1,6 @@
 package com.example.springonlinebookstore.model;
 
-import com.example.springonlinebookstore.model.enumeration.Status;
+import com.example.springonlinebookstore.model.enumeration.OrderStatus;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -42,8 +42,8 @@ public class Order {
     private User user;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
-    private Status status = Status.NEW;
+    @Column(name = "order_status",nullable = false)
+    private OrderStatus status = OrderStatus.NEW;
 
     @Column(nullable = false)
     private BigDecimal total;

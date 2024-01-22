@@ -19,7 +19,7 @@ databaseChangeLog:
                     foreignKeyName: fk_orders_user
                     references: users(id)
               - column:
-                  name: status
+                  name: order_status
                   type: varchar(50)
                   constraints:
                     nullable: false

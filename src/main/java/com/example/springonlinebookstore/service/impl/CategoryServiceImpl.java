@@ -10,6 +10,7 @@ import com.example.springonlinebookstore.service.CategoryService;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -17,6 +18,7 @@ public class CategoryServiceImpl implements CategoryService {
     private final CategoryRepository categoryRepository;
     private final CategoryMapper categoryMapper;
 
+    @Transactional(readOnly = true)
     @Override
     public List<CategoryDto> findAll() {
         return categoryRepository.findAll().stream()
@@ -24,6 +26,7 @@ public class CategoryServiceImpl implements CategoryService {
                 .toList();
     }
 
+    @Transactional(readOnly = true)
     @Override
     public CategoryDto findById(Long id) {
         Category category = categoryRepository.findById(id).orElseThrow(() ->

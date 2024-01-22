@@ -11,7 +11,7 @@ import com.example.springonlinebookstore.model.CartItem;
 import com.example.springonlinebookstore.model.Order;
 import com.example.springonlinebookstore.model.OrderItem;
 import com.example.springonlinebookstore.model.User;
-import com.example.springonlinebookstore.model.enumeration.Status;
+import com.example.springonlinebookstore.model.enumeration.OrderStatus;
 import com.example.springonlinebookstore.repository.cartitems.CartItemRepository;
 import com.example.springonlinebookstore.repository.order.OrderRepository;
 import com.example.springonlinebookstore.repository.orderitem.OrderItemRepository;
@@ -61,12 +61,13 @@ public class OrderServiceImpl implements OrderService {
                 .toList();
     }
 
+    @Transactional
     @Override
     public OrderResponseDto updateStatusOrder(Long id, OrderUpdateRequestDto orderUpdateDto) {
         Order order = orderRepository.findById(id)
                 .orElseThrow(() ->
                         new EntityNotFoundException("Order by id: " + id + " not found"));
-        order.setStatus(Status.valueOf(orderUpdateDto.status()));
+        order.setStatus(OrderStatus.valueOf(orderUpdateDto.status()));
         return orderMapper.toDto(orderRepository.save(order));
     }
 
