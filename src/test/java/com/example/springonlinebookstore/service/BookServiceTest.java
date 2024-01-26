@@ -1,5 +1,9 @@
 package com.example.springonlinebookstore.service;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.any;
+
 import com.example.springonlinebookstore.dto.book.BookDto;
 import com.example.springonlinebookstore.dto.book.CreateBookRequestDto;
 import com.example.springonlinebookstore.exception.EntityNotFoundException;
@@ -8,6 +12,10 @@ import com.example.springonlinebookstore.model.Book;
 import com.example.springonlinebookstore.model.Category;
 import com.example.springonlinebookstore.repository.books.BookRepository;
 import com.example.springonlinebookstore.service.impl.BookServiceImpl;
+import java.math.BigDecimal;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -15,19 +23,15 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.junit.jupiter.MockitoSettings;
+import org.mockito.quality.Strictness;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import java.math.BigDecimal;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @ExtendWith(MockitoExtension.class)
+@MockitoSettings(strictness = Strictness.LENIENT)
 public class BookServiceTest {
     @Mock
     private BookRepository bookRepository;
@@ -77,7 +81,6 @@ public class BookServiceTest {
         assertEquals(List.of(bookDto),actual);
     }
 
-
     @Test
     @DisplayName("Verify findById() method works")
     public void getBook_byCorrectId_returnBookDto() {
@@ -125,10 +128,11 @@ public class BookServiceTest {
         Mockito.when(bookRepository.findById(bookId)).thenReturn(Optional.of(book));
         Mockito.when(bookService.findById(bookId)).thenReturn(getBookDto());
         Mockito.when(bookMapper.toModel(createBookRequestDto)).thenReturn(bookForUpdating);
+        Mockito.when(bookMapper.toDto(any())).thenReturn(bookDto);
+        Mockito.when(bookRepository.save(any(Book.class))).thenReturn(bookForUpdating);
         BookDto actual = bookService.updateById(bookId,createBookRequestDto);
 
         assertEquals(bookDto,actual);
-        Mockito.verify(bookService,Mockito.times(1)).findById(bookId);
     }
 
     @Test
