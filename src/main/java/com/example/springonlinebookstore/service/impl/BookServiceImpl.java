@@ -47,12 +47,14 @@ public class BookServiceImpl implements BookService {
         return bookMapper.toDto(book);
     }
 
+    @Transactional
     @Override
     public BookDto updateById(Long id, CreateBookRequestDto createBookRequestDto) {
         BookDto bookById = findById(id);
         Book modelBook = bookMapper.toModel(createBookRequestDto);
         modelBook.setId(bookById.getId());
-        return bookMapper.toDto(bookRepository.save(modelBook));
+        Book save = bookRepository.save(modelBook);
+        return bookMapper.toDto(save);
     }
 
     @Transactional(readOnly = true)
