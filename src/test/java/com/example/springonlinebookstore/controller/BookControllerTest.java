@@ -47,7 +47,7 @@ public class BookControllerTest {
     }
 
     @Test
-    @DisplayName("")
+    @DisplayName("Verify save() method works, return dto")
     @WithMockUser(username = "admin", roles = "ADMIN")
     @Sql(scripts = {"classpath:database/add-categories-to-database.sql"})
     public void saveBook_ValidCreateBookRequestDto_Success() throws Exception {
@@ -75,7 +75,7 @@ public class BookControllerTest {
     }
 
     @Test
-    @DisplayName("")
+    @DisplayName("Verify findById() method works, return dto")
     @WithMockUser(username = "admin", roles = "ADMIN")
     @Sql(scripts = {"classpath:database/add-categories-to-database.sql",
             "classpath:database/add-books-to-database.sql",
@@ -93,7 +93,7 @@ public class BookControllerTest {
     }
 
     @Test
-    @DisplayName("")
+    @DisplayName("Verify update() method works, return dto")
     @WithMockUser(username = "admin", roles = "ADMIN")
     @Sql(scripts = {"classpath:database/add-categories-to-database.sql",
             "classpath:database/add-books-to-database.sql",
@@ -127,7 +127,7 @@ public class BookControllerTest {
     }
 
     @Test
-    @DisplayName("")
+    @DisplayName("Verify delete() method works")
     @WithMockUser(username = "admin", roles = "ADMIN")
     @Sql(scripts = {"classpath:database/add-categories-to-database.sql",
             "classpath:database/add-books-to-database.sql",

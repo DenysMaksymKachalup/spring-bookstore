@@ -46,7 +46,7 @@ public class CategoryControllerTest {
     }
 
     @Test
-    @DisplayName("ads")
+    @DisplayName("Verify save() method works, return dto")
     @WithMockUser(username = "admin", roles = "ADMIN")
     public void saveBook_ValidCategoryRequestDto_Success() throws Exception {
         CategoryRequestDto categoryRequestDto = getCategoryRequestDto();
@@ -65,7 +65,7 @@ public class CategoryControllerTest {
     }
 
     @Test
-    @DisplayName("asd")
+    @DisplayName("Verify findById() method works, return dto")
     @WithMockUser(username = "admin", roles = "ADMIN")
     @Sql(scripts = {"classpath:database/add-categories-to-database.sql"})
     public void getCategory_byCorrectId_returnDto() throws Exception {
@@ -81,7 +81,7 @@ public class CategoryControllerTest {
     }
 
     @Test
-    @DisplayName("asdad")
+    @DisplayName("Verify update() method works, return dto")
     @WithMockUser(username = "admin", roles = "ADMIN")
     @Sql(scripts = {"classpath:database/add-categories-to-database.sql"})
     public void update_byCorrectId_returnDto() throws Exception {
@@ -104,7 +104,7 @@ public class CategoryControllerTest {
     }
 
     @Test
-    @DisplayName("asd")
+    @DisplayName("Verify save() method works")
     @WithMockUser(username = "admin", roles = "ADMIN")
     @Sql(scripts = {"classpath:database/add-categories-to-database.sql"})
     public void deleteCategories_byCorrectId() throws Exception {
