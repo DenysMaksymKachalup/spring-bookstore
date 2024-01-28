@@ -25,6 +25,17 @@ The Project Structure embodies best practices, including adherence to SOLID prin
 | Build Automation         | Maven                                                            |
 
 
+### Domain Models (Entities)
+
+1. **User**: Contains information about registered users including authentication details and personal information.
+2. **Role**: Represents the role of a user in the system, such as admin or user.
+3. **Book**: Represents a book available in the store.
+4. **Category**: Represents a category that a book can belong to.
+5. **ShoppingCart**: Represents a user's shopping cart.
+6. **CartItem**: Represents an item in a user's shopping cart.
+7. **Order**: Represents an order placed by a user.
+8. **OrderItem**: Represents an item in a user's order.
+
 ### Endpoints
 #### - Authentication Controller:
 - **POST /auth/login:** User authentication.
@@ -59,17 +70,6 @@ The Project Structure embodies best practices, including adherence to SOLID prin
 - **PUT /cart/cart-items/{cartItemId}:** Change quantity by cart item id.
 - **DELETE /cart/cart-items/{id}:** Delete cart item by id
 
-
-### Domain Models (Entities)
-
-1. **User**: Contains information about registered users including authentication details and personal information.
-2. **Role**: Represents the role of a user in the system, such as admin or user.
-3. **Book**: Represents a book available in the store.
-4. **Category**: Represents a category that a book can belong to.
-5. **ShoppingCart**: Represents a user's shopping cart.
-6. **CartItem**: Represents an item in a user's shopping cart.
-7. **Order**: Represents an order placed by a user.
-8. **OrderItem**: Represents an item in a user's order.
 <div>
 
 ## Features⚡️
